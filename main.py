@@ -9,7 +9,7 @@ regexDictionary = {
     "insert" : r"^(INSERT INTO|insert into) [A-Za-z][\w]* (VALUES|values) \((null|true|false|\d+|\'[ \w]+\')((,(null|true|false|\d+|\'[ \w]+\')))*\);?",
     "select" : r"^(SELECT|select) ([A-Za-z]([\w])*|\*) (FROM|from) ([A-Za-z]([\w])*)( (where|WHERE) ([A-Za-z]([\w]*)) = (null|true|false|\d+|\'[ \w]+\')( (AND|and) ([A-Za-z]([\w]*)) = (null|true|false|\d+|\'[ \w]+\'))*)?;?",
     "delete" : r"^(DELETE|delete) (FROM|from) ([A-Za-z]([\w])*)( (where|WHERE) ([A-Za-z]([\w]*)) = (null|true|false|\d+|\'[ \w]+\')( (AND|and) ([A-Za-z]([\w]*)) = (null|true|false|\d+|\'[ \w]+\'))*)?;?",
-    "update" : r"fds"
+    "update" : r"^(UPDATE|update) ([A-Za-z]([\w])*|\*) (SET|set) ([A-Za-z]([\w])*) = (null|true|false|\d+|\'[ \w]+\')(, ?([A-Za-z]([\w])*) = (null|true|false|\d+|\'[ \w]+\'))?( (where|WHERE) ([A-Za-z]([\w]*)) = (null|true|false|\d+|\'[ \w]+\')( (AND|and) ([A-Za-z]([\w]*)) = (null|true|false|\d+|\'[ \w]+\'))*)?;?"
 }
 
 inyection = " ".join(sys.argv[1:])
