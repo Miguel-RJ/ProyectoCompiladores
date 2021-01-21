@@ -1,0 +1,76 @@
+<form action="/execute_command" method="POST">
+    <input type="text" name="command" placeholder="USE testdb" size="100"><br>
+    <p>
+        <input type="radio" name="is_sql_command" value="evaluate">Test SQL Command<br>
+
+        <input type="radio" name="is_sql_command" value="run">Run your SQL Command<br>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </p>
+    
+    <button type="submit">
+        Run
+    </button>
+</form>
+{% if selected_items is defined%}
+    Resultado
+    <table>
+        {% for row in selected_items %}
+        <tr>
+            {{row}}
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% if db_in_use is defined %}
+    <p>Base de Datos en uso: {{ db_in_use }}</p>
+{% endif %}
+{% if available_databases is defined %}
+<table>
+    <thead>
+        <tr>
+            <td>Bases de datos disponibles</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for database in available_databases %}
+        <tr>
+            
+            {% if db_in_use == database %}
+            <td>{{ database }} <-- en uso</td>
+            {% else %}
+            <td>{{ database }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if available_tables is defined %}
+    Tablas disponibles en Base de datos
+
+    {% for key, values in available_tables.items() %}
+    <table>
+        <thead>
+            <tr>
+                <h1>{{ key }}</h1>
+            </tr>
+        </thead>
+        <tbody>
+        {% for column in values %}
+            <tr>
+                <td>{{ column.1}}</td>
+                <td>{{ column.2}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endfor%}
+{% endif %}
+
