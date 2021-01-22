@@ -35,12 +35,19 @@ def execute_command():
         command = request.form['command']
         result = test(command, True)
         if result != None:
-            op, flash_message = run_command(result)
-            flash(flash_message)
-            return redirect(url_for('index'))
+            if request.form['is_sql_command'] == 'run':
+                op, flash_message = run_command(result, True)
+                flash(flash_message)
+                return redirect(url_for('index'))
+            if request.form['is_sql_command'] == 'evaluate':
+                op, flash_message = run_command(result, False)
+                flash(flash_message)
+                return redirect(url_for('index'))
         return "Sin respuesta"
 
-def run_command(result):
+def run_command(result, allow):
+    if not allow:
+        return 0, f'Se restringió la operación {result[0]}. Intentaron ejecutar: {result[1]}'
     if result[0] == "create database":
         if os.path.exists('databases/'+ result[1][15:].strip() + '.db'):
             return 1, f"Ya existe la Base de Datos {result[1][15:].strip()}"
