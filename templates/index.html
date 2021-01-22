@@ -1,9 +1,131 @@
-<form action="/execute_command" method="POST">
-    <input type="text" name="command" placeholder="USE testdb" size="100"><br>
-    <p>
-        <input type="radio" name="is_sql_command" value="evaluate">Test SQL Command<br>
+<!DOCTYPE html>
+<html>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+    <style> 
+        body{
+            background-color: #F0F0F0;
+        }
+        #footer { 
+            position: fixed; 
+            padding: 5px 0px 10px 0px; 
+            bottom: 0; 
+            width: 100%; 
+            /* Height of the footer*/  
+            height: 89px; 
+            z-index: 9;
+                    } 
+        body {
+        min-height: 400px;
+        margin-bottom: 100px;
+        clear: both;
+        }
 
-        <input type="radio" name="is_sql_command" value="run">Run your SQL Command<br>
+        .text{
+            padding-left: 20px;
+        }
+
+        #blond{
+            font-weight: bold;
+        }
+
+        #text-2{
+            padding-right: 7px;
+        }
+
+        table { 
+            border-collapse: collapse; 
+        }
+
+        td#datatable{
+            border: solid thin;
+            padding-right: 9px;
+        }
+
+        tr#datatable { 
+            border: solid thin; 
+            }
+    </style> 
+</head>
+<body >
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+          <img src="/static/sql-logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+          SQL Injection
+        </a>
+        <span class="navbar-text" id="text-2">
+            Compiladores  
+        </span>
+    </nav>
+    <div class="w3-sidebar w3-bar-block" style="width:25%">
+        
+{% if db_in_use is defined %}
+    <p class="text">Base de Datos en uso: {{ db_in_use }}</p>
+{% endif %}
+{% if available_databases is defined %}
+<table>
+    <thead>
+        <tr>
+            <td class="text">Bases de datos disponibles</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for database in available_databases %}
+        <tr >
+            
+            {% if db_in_use == database %}
+            <td class="text"><p id="blond">{{ database }} <-- en uso</p></td>
+            {% else %}
+            <td class="text">{{ database }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if available_tables is defined %}
+<p class="text">
+    Tablas disponibles en Base de datos
+</p>
+    {% for key, values in available_tables.items() %}
+    <table>
+        <thead>
+            <tr id="datatable">
+                <h3 class="text">{{ key }}</h3>
+            </tr>
+        </thead>
+        <tbody>
+        {% for column in values %}
+            <tr id="datatable">
+                <td class="text" id="datatable">{{ column.1}}</td>
+                <td class="text" id="datatable">{{ column.2}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endfor%}
+{% endif %}
+      </div>
+      
+      <div style="margin-left:25%">
+      
+    <h1 class="text">Bienvenid@ al Analizador de Sentencias SQL</h1>
+<h5 class="text">Escriba la sentencia a analizar</h5>
+<form action="/execute_command" method="POST" class="text">
+    <input type="text" name="command" placeholder="USE testdb" size="100"><br>
+    <h5>Seleccione la acci&oacute;n a realizar.</h5>
+    <p>
+        <input type="radio" name="is_sql_command" value="evaluate" class="text">Test SQL Command<br>
+
+        <input type="radio" name="is_sql_command" value="run" class="text">Run your SQL Command<br>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for message in messages %}
@@ -13,64 +135,37 @@
         {% endwith %}
     </p>
     
-    <button type="submit">
+    <button class="btn btn-success" type="submit">
         Run
     </button>
-</form>
-{% if selected_items is defined%}
+
+    {% if selected_items is defined%}
+<p class="text">
     Resultado
+</p>
     <table>
         {% for row in selected_items %}
-        <tr>
+        <tr class="text" id="datatable">
             {{row}}
         </tr>
         {% endfor %}
     </table>
 {% endif %}
-{% if db_in_use is defined %}
-    <p>Base de Datos en uso: {{ db_in_use }}</p>
-{% endif %}
-{% if available_databases is defined %}
-<table>
-    <thead>
-        <tr>
-            <td>Bases de datos disponibles</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for database in available_databases %}
-        <tr>
-            
-            {% if db_in_use == database %}
-            <td>{{ database }} <-- en uso</td>
-            {% else %}
-            <td>{{ database }}</td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endif %}
+</form>
 
-{% if available_tables is defined %}
-    Tablas disponibles en Base de datos
+</div>
+<footer class="bg-light text-center text-lg-start", id="footer">
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      Aguirre Arroyo Froylan. -
+      Fr&iacute;as Hern&aacute;ndez Axel. -
+      Ram&iacute;rez Ju&aacute;rez Miguel &Aacute;ngel. <br>
+      <a class="text-dark" href="https://github.com/Miguel-RJ/ProyectoCompiladores">Source code</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
 
-    {% for key, values in available_tables.items() %}
-    <table>
-        <thead>
-            <tr>
-                <h1>{{ key }}</h1>
-            </tr>
-        </thead>
-        <tbody>
-        {% for column in values %}
-            <tr>
-                <td>{{ column.1}}</td>
-                <td>{{ column.2}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% endfor%}
-{% endif %}
+</body>
+</html>
 
+  
